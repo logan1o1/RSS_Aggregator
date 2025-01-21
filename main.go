@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	err := godotenv.Load()
 
 	if err != nil {
@@ -30,11 +29,18 @@ func main() {
 		AllowedOrigins: []string{"https://*", "http://*"},
 		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowedHeaders:   []string{"*"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
+
+	v1Router := chi.NewRouter()
+
+	router.Mount("/v1", v1Router)
+
+	v1Router.Get("/ready", handlerReadiness)
+	v1Router.Get("/err", handlerError)
 
 	serv := &http.Server{
 		Handler: router,
