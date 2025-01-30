@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/logan1o1/RSS_Aggregator/internal/auth"
+	// "github.com/logan1o1/RSS_Aggregator/internal/auth"
 	"github.com/logan1o1/RSS_Aggregator/internal/database"
 )
 
@@ -38,18 +38,6 @@ func (apiCfg *apiConfig) handlerCreateUser(resp http.ResponseWriter, req *http.R
 	respondWithJSON(resp, 201, databaseUserToUser(user))
 }
 
-func (apiCfg *apiConfig) handlerGetUser(resp http.ResponseWriter, req *http.Request) {
-	apiKey, err := auth.GetAPIKey(req.Header)
-	if err != nil {
-		respondWithError(resp, 403, fmt.Sprintf("Error getting the api_key from the header: %v", err))
-		return
-	}
-
-	user, err := apiCfg.DB.GetUsersByAPIKey(req.Context(), apiKey)
-	if err != nil {
-		respondWithError(resp, 400, fmt.Sprintf("Error getting the user: %v", err))
-		return
-	}
-
+func (apiCfg *apiConfig) handlerGetUser(resp http.ResponseWriter, req *http.Request, user database.User) {
 	respondWithJSON(resp, 200, databaseUserToUser(user))
 }

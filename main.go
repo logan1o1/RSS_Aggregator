@@ -62,7 +62,8 @@ func main() {
 	v1Router.Get("/ready", handlerReadiness)
 	v1Router.Get("/err", handlerError)
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
-	v1Router.Get("/users", apiCfg.handlerGetUser)
+	v1Router.Get("/users", apiCfg.authMiddleware(apiCfg.handlerGetUser))
+	v1Router.Post("/feeds", apiCfg.authMiddleware(apiCfg.handlerCreateFeed))
 
 	serv := &http.Server{
 		Handler: router,
