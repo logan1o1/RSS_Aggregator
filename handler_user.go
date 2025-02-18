@@ -42,7 +42,7 @@ func (apiCfg *apiConfig) handlerCreateUser(resp http.ResponseWriter, req *http.R
 
 func (apiCfg *apiConfig) handlerGetUser(resp http.ResponseWriter, req *http.Request) {
 	type parameters struct {
-		ApiKey string `json:"api_key"`
+		Name string `json:"name"`
 	}
 	decoder := json.NewDecoder(req.Body)
 
@@ -53,7 +53,7 @@ func (apiCfg *apiConfig) handlerGetUser(resp http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	user, err := apiCfg.DB.GetUsersByAPIKey(req.Context(), params.ApiKey)
+	user, err := apiCfg.DB.GetUserByName(req.Context(), params.Name)
 	if err != nil {
 		respondWithError(resp, 400, fmt.Sprintf("Err getting user in get_user_handler: %v", err))
 		return
